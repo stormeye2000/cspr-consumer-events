@@ -2,12 +2,14 @@ package com.stormeye.event.store.services;
 
 import com.casper.sdk.model.event.DataType;
 import com.casper.sdk.model.event.EventType;
+import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 
@@ -36,7 +38,7 @@ class EventInfoDeserializerTest {
 
 
     @Test
-    @Disabled
+    //@Disabled
     void deserializeBlocAddedEvent() throws Exception {
 
         var in = EventInfoDeserializerTest.class.getResourceAsStream(BLOCK_ADDED_JSON);
@@ -49,6 +51,10 @@ class EventInfoDeserializerTest {
         assertThat(eventInfo.getDataType(), is(DataType.BLOCK_ADDED));
         assertThat(eventInfo.getSource(), is("http://65.21.235.219:9999"));
         assertThat(eventInfo.getVersion(), is("1.0.0"));
+        assertThat(eventInfo.getData(), instanceOf(BlockAdded.class));
+
+        BlockAdded blockAdded = (BlockAdded) eventInfo.getData();
+        assertThat(blockAdded.getBlockHash().toString(), is("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e927236e"));
     }
 
 }
