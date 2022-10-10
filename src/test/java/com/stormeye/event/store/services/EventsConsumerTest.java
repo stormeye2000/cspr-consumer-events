@@ -10,7 +10,6 @@ import org.springframework.test.context.TestPropertySource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author ian@meywood.com
@@ -29,6 +28,5 @@ class EventsConsumerTest {
     @Test
     void testConfig() {
         assertThat(kafkaBroker, is(notNullValue()));
-
     }
 }

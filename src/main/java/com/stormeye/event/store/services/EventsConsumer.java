@@ -3,6 +3,7 @@ package com.stormeye.event.store.services;
 import com.casper.sdk.model.event.EventTarget;
 import com.casper.sdk.model.event.EventType;
 import com.casper.sdk.service.EventService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stormeye.event.store.exceptions.EventConsumerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,12 @@ public class EventsConsumer {
 
     private  EventService eventService;
 
+    private final ObjectMapper objectMapper;
+
     public EventsConsumer() {
+
+        objectMapper  = new ObjectMapper();
+
        /* try {
            // eventService = EventService.usingPeer(new URI("http://localhost"));
         } catch (URISyntaxException e) {
@@ -36,6 +42,7 @@ public class EventsConsumer {
     @KafkaListener(topics = {"main", "deploys", "sigs"})
     public void consumeWithHeaders(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic, @Payload String event) {
         try {
+
             ///eventService.consumeEvents(EventType.valueOf(topic.toUpperCase()), EventTarget.POJO, event);
             // TODO eventAuditService.save(event);
             logger.debug("Successfully processed topic [{}]: event {}", topic, event);
