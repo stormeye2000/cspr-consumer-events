@@ -1,10 +1,6 @@
 package com.stormeye.event.store.services;
 
-import com.casper.sdk.model.event.EventTarget;
-import com.casper.sdk.model.event.EventType;
-import com.casper.sdk.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stormeye.event.store.exceptions.EventConsumerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -13,9 +9,6 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 /**
  * @author ian@meywood.com
  */
@@ -23,28 +16,24 @@ import java.net.URISyntaxException;
 public class EventsConsumer {
 
     private final Logger logger = LoggerFactory.getLogger(EventsConsumer.class);
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private  EventService eventService;
+    private final StorageFactory storageFactory;
 
-    private final ObjectMapper objectMapper;
-
-    public EventsConsumer() {
-
-        objectMapper  = new ObjectMapper();
-
-       /* try {
-           // eventService = EventService.usingPeer(new URI("http://localhost"));
-        } catch (URISyntaxException e) {
-            throw new EventConsumerException(e);
-        }*/
+    public EventsConsumer(final StorageFactory storageFactory) {
+        this.storageFactory = storageFactory;
     }
 
     @KafkaListener(topics = {"main", "deploys", "sigs"})
     public void consumeWithHeaders(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic, @Payload String event) {
         try {
 
-            ///eventService.consumeEvents(EventType.valueOf(topic.toUpperCase()), EventTarget.POJO, event);
-            // TODO eventAuditService.save(event);
+            var eventInfo = objectMapper.readValue(event, EventInfo.class);
+            var storageService = storageFactory.getStorageService(eventInfo.getDataType());
+            if (storageService != null) {
+                storageService.store(eventInfo.getData());
+            }
+
             logger.debug("Successfully processed topic [{}]: event {}", topic, event);
 
         } catch (Exception e) {

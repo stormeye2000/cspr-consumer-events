@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.stormeye.event.store.exceptions.EventConsumerException;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -18,9 +19,10 @@ import java.lang.reflect.Field;
 /**
  * @author ian@meywood.com
  */
+@Service
 public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
-
-    private static Class clazz;
+    @SuppressWarnings("rawtypes")
+    private static Class eventRootClass;
     private static Field dataField;
 
     static {
@@ -30,8 +32,8 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
 
     private static void init() {
         try {
-            clazz = Class.forName("com.casper.sdk.service.impl.event.EventRoot");
-            dataField = clazz.getDeclaredField("data");
+            eventRootClass = Class.forName("com.casper.sdk.service.impl.event.EventRoot");
+            dataField = eventRootClass.getDeclaredField("data");
             dataField.setAccessible(true);
         } catch (ClassNotFoundException | NoSuchFieldException e) {
             throw new EventConsumerException(e);
@@ -53,7 +55,8 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
 
             JsonParser innerParser = node.get("data").traverse();
             innerParser.setCodec(p.getCodec());
-            Object eventRoot = p.getCodec().readValue(innerParser, clazz);
+            //noinspection unchecked
+            Object eventRoot = p.getCodec().readValue(innerParser, eventRootClass);
             if (eventRoot != null) {
                 data = (EventData) dataField.get(eventRoot);
             }
