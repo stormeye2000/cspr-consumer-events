@@ -1,10 +1,9 @@
-package com.stormeye.event.store.services;
+package com.stormeye.event.store.services.event;
 
 import com.casper.sdk.model.event.DataType;
 import com.casper.sdk.model.event.EventType;
 import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -1,6 +1,6 @@
-package com.stormeye.event.store.services;
+package com.stormeye.event.store.services.storage.block.repository;
 
-import com.stormeye.event.store.domain.Block;
+import com.stormeye.event.store.services.storage.block.domain.Block;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 

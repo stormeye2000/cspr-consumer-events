@@ -1,4 +1,4 @@
-package com.stormeye.event.store.domain;
+package com.stormeye.event.store.services.storage.block.domain;
 
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
@@ -10,16 +10,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
 import java.util.Date;
 
 /**
  * The domain object for a Block
+ *
  * @author ian@meywood.com
  */
 @Getter
 @Setter
- @AllArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Block extends AbstractPersistable<Long> {

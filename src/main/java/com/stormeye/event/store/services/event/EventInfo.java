@@ -1,7 +1,6 @@
-package com.stormeye.event.store.services;
+package com.stormeye.event.store.services.event;
 
 import com.casper.sdk.model.event.DataType;
-import com.casper.sdk.model.event.Event;
 import com.casper.sdk.model.event.EventData;
 import com.casper.sdk.model.event.EventType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

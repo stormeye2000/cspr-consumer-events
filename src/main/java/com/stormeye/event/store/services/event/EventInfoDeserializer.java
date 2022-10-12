@@ -1,4 +1,4 @@
-package com.stormeye.event.store.services;
+package com.stormeye.event.store.services.event;
 
 import com.casper.sdk.model.event.DataType;
 import com.casper.sdk.model.event.EventData;

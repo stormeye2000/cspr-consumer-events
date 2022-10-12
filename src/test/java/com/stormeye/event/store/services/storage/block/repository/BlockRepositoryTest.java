@@ -1,8 +1,8 @@
-package com.stormeye.event.store.services;
+package com.stormeye.event.store.services.storage.block.repository;
 
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
-import com.stormeye.event.store.domain.Block;
+import com.stormeye.event.store.services.storage.block.domain.Block;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

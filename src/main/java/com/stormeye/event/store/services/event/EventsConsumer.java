@@ -1,6 +1,7 @@
-package com.stormeye.event.store.services;
+package com.stormeye.event.store.services.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stormeye.event.store.services.storage.StorageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;

@@ -1,9 +1,11 @@
-package com.stormeye.event.store.services;
+package com.stormeye.event.store.services.storage.block;
 
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stormeye.event.store.services.storage.block.repository.BlockRepository;
+import com.stormeye.event.store.services.event.EventInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,7 +39,7 @@ class BlockAddedStorageServiceTest {
     @Test
     void storeBlock() throws IOException, NoSuchAlgorithmException {
 
-        var in = EventInfoDeserializerTest.class.getResourceAsStream(BLOCK_ADDED_JSON);
+        var in = BlockAddedStorageServiceTest.class.getResourceAsStream(BLOCK_ADDED_JSON);
 
         var eventInfo = new ObjectMapper().readValue(in, EventInfo.class);
         assertThat(eventInfo.getData(), instanceOf(BlockAdded.class));
@@ -52,7 +54,7 @@ class BlockAddedStorageServiceTest {
         assertThat(foundOptional.isPresent(), is(true));
         block = foundOptional.get();
 
-        // Assert that all fields have been correctly persisted
+        // Assert that all fields have been correctly persed
         assertThat(block.getId(), is(notNullValue()));
         assertThat(block.getBlockHash(), is(new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e927236e")));
         assertThat(block.getParentHash(), is(new Digest("6c6aa63fb4e3e10f964e3be535d29b023902ace44483409e932ffd3cadfbf47b")));
