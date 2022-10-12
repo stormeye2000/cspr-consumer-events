@@ -49,8 +49,12 @@ public class BlockResource {
      */
     @GetMapping(value = "/blocks", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PageResponse<Block>> getBlocks(@RequestParam(value = "page", defaultValue = "1", required = false) final int page,
-                                                  @RequestParam(value = "size", defaultValue = "10", required = false) final int size) {
-        var request = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "id"));
+                                                  @RequestParam(value = "size", defaultValue = "10", required = false) final int size,
+                                                  @RequestParam(value = "order_by", defaultValue = "timestamp", required = false) final String orderBy,
+                                                  @RequestParam(value = "order_direction", defaultValue = "DESC", required = false) final Sort.Direction orderDirection) {
+
+        var request = PageRequest.of(page - 1, size, Sort.by(orderDirection, orderBy));
         return ResponseEntity.ok(new PageResponse<>(blockRepository.findAll(request)));
     }
+
 }

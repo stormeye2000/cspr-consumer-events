@@ -78,11 +78,41 @@ class BlockResourceTest {
                 .andExpect(jsonPath("$.data.[4].blockHash", is("3f9a2258144a85a4dfa2817cbe2a2c75f8775a939f416a5f96be96a41f0c94bf")))
 
                 .andExpect(jsonPath("$.itemCount", is(30)))
-                .andExpect(jsonPath("$.pageCount", is(6)));
+                .andExpect(jsonPath("$.pageCount", is(6)))
+                .andExpect(jsonPath("$.pageNumber", is(1)));
+    }
+
+    @Test
+    void get2ndPage() throws Exception {
+
+        mockMvc.perform(get("/blocks")
+                        .param("page", "2")
+                        .param("size", "5"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data.[*]", hasSize(5)))
+                .andExpect(jsonPath("$.data.[0].blockHash", is("50432875b6ed13cc9d45df8e818e744ce1b65a010ca3b222179ff65314919eaa")))
+
+                .andExpect(jsonPath("$.data.[4].blockHash", is("0865e6c790a0b609c3df5f991f25e429905a71ac9ff3a473479f75b9fad3d816")))
+
+                .andExpect(jsonPath("$.itemCount", is(30)))
+                .andExpect(jsonPath("$.pageCount", is(6)))
+                .andExpect(jsonPath("$.pageNumber", is(2)));
+    }
+
+    @Test
+    void sortTimestampAscending() {
     }
 
 
-    private void createTestData() throws IOException {
+    @Test
+    void sortEraDescending() {
+    }
+
+
+    public  void createTestData() throws IOException {
+
+
 
         var in = BlockResourceTest.class.getResourceAsStream(BLOCKS_JSON);
         var blocks = new ObjectMapper().readValue(in, new TypeReference<List<Block>>() {

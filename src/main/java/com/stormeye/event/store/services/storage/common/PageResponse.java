@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * The JSON for a page of data that matched the current event store API
+ *
  * @author ian@meywood.com
  */
 public class PageResponse<T> {
@@ -14,20 +15,22 @@ public class PageResponse<T> {
 
     private final long pageCount;
     private final long itemCount;
+    private final int pageNumber;
 
     @SuppressWarnings("unused")
     public PageResponse() {
-        this(new ArrayList<>(), 0, 0);
+        this(new ArrayList<>(), 0, 0, 0);
     }
 
-    public PageResponse(final List<T> data, final long pageCount, final long itemCount) {
+    public PageResponse(final List<T> data, final long pageCount, final long itemCount, final int pageNumber) {
         this.data = data;
         this.pageCount = pageCount;
         this.itemCount = itemCount;
+        this.pageNumber = pageNumber + 1;
     }
 
-    public PageResponse(Page<T> page) {
-        this(page.getContent(), page.getTotalPages(), page.getTotalElements());
+    public PageResponse(final Page<T> page) {
+        this(page.getContent(), page.getTotalPages(), page.getTotalElements(), page.getNumber());
     }
 
     public List<T> getData() {
@@ -40,5 +43,9 @@ public class PageResponse<T> {
 
     public long getItemCount() {
         return itemCount;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
     }
 }

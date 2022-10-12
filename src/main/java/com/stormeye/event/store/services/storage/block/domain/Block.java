@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -26,6 +24,11 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(indexes = {
+        @Index(columnList = "timestamp"),
+        @Index(columnList = "blockHeight"),
+        @Index(columnList = "eraId")
+})
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class Block extends AbstractPersistable<Long> {
 
