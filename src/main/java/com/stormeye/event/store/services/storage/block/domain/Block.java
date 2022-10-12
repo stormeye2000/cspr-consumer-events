@@ -2,6 +2,7 @@ package com.stormeye.event.store.services.storage.block.domain;
 
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.stormeye.event.store.conveter.DigestConverter;
 import com.stormeye.event.store.conveter.PublicKeyConverter;
 import lombok.AllArgsConstructor;
@@ -25,8 +26,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Block extends AbstractPersistable<Long> {
-    private Long id;
+
     @Convert(converter = DigestConverter.class)
     @Column
     private Digest blockHash;
@@ -48,4 +50,6 @@ public class Block extends AbstractPersistable<Long> {
     @Column
     @Convert(converter = PublicKeyConverter.class)
     private PublicKey proposer;
+    @Column
+    private long blockHeight;
 }

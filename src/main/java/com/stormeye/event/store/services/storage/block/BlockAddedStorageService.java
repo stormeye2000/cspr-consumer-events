@@ -25,15 +25,15 @@ class BlockAddedStorageService implements StorageService<BlockAdded, Block> {
     public Block store(final BlockAdded toStore) {
 
         return this.blockRepository.save(
-                new Block(null,
-                        toStore.getBlockHash(),
+                new Block(toStore.getBlockHash(),
                         toStore.getBlock().getHeader().getParentHash(),
                         toStore.getBlock().getHeader().getTimeStamp(),
                         toStore.getBlock().getHeader().getStateRootHash(),
                         toStore.getBlock().getBody().getDeployHashes().size(),
                         toStore.getBlock().getBody().getTransferHashes().size(),
                         toStore.getBlock().getHeader().getEraId(),
-                        toStore.getBlock().getBody().getProposer()
+                        toStore.getBlock().getBody().getProposer(),
+                        toStore.getBlock().getHeader().getHeight()
                 )
         );
     }
