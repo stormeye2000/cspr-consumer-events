@@ -26,7 +26,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class Block extends AbstractPersistable<Long> {
 
     @Convert(converter = DigestConverter.class)

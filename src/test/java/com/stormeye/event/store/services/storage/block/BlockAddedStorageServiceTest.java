@@ -54,7 +54,7 @@ class BlockAddedStorageServiceTest {
         assertThat(foundOptional.isPresent(), is(true));
         block = foundOptional.get();
 
-        // Assert that all fields have been correctly persed
+        // Assert that all fields have been correctly persisted
         assertThat(block.getId(), is(notNullValue()));
         assertThat(block.getBlockHash(), is(new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e927236e")));
         assertThat(block.getParentHash(), is(new Digest("6c6aa63fb4e3e10f964e3be535d29b023902ace44483409e932ffd3cadfbf47b")));
