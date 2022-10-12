@@ -6,6 +6,7 @@ import com.stormeye.event.store.services.storage.common.PageResponse;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -53,8 +54,19 @@ public class BlockResource {
                                                   @RequestParam(value = "order_by", defaultValue = "timestamp", required = false) final String orderBy,
                                                   @RequestParam(value = "order_direction", defaultValue = "DESC", required = false) final Sort.Direction orderDirection) {
 
-        var request = PageRequest.of(page - 1, size, Sort.by(orderDirection, orderBy));
+
+        var request = PageRequest.of(page - 1, size, getSort(orderBy, orderDirection));
         return ResponseEntity.ok(new PageResponse<>(blockRepository.findAll(request)));
+    }
+
+    @NotNull
+    private static Sort getSort(String orderBy, Sort.Direction orderDirection) {
+        if ("timestamp".equals(orderBy)) {
+            return Sort.by(orderDirection, orderBy);
+        } else return Sort.by(
+                new Sort.Order(orderDirection, orderBy),
+                new Sort.Order(Sort.Direction.ASC, "timestamp")
+        );
     }
 
 }

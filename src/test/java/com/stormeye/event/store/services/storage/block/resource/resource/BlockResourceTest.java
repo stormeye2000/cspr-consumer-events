@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -101,18 +102,59 @@ class BlockResourceTest {
     }
 
     @Test
-    void sortTimestampAscending() {
+    void sortTimestampAscending() throws Exception {
+
+        mockMvc.perform(get("/blocks")
+                        .param("page", "1")
+                        .param("size", "5")
+                        .param("order_by", "timestamp")
+                        .param("order_direction", Sort.Direction.ASC.name()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.itemCount", is(30)))
+                .andExpect(jsonPath("$.pageCount", is(6)))
+                .andExpect(jsonPath("$.pageNumber", is(1)))
+                .andExpect(jsonPath("$.data.[0].blockHash", is("b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f5")))
+                .andExpect(jsonPath("$.data.[4].blockHash", is("771898057312a00e18ab600f63920fd9846821ae74d265b2ddd81b20c1bc0794")));
     }
 
 
     @Test
-    void sortEraDescending() {
+    void sortEraDescending() throws Exception {
+
+        mockMvc.perform(get("/blocks")
+                        .param("page", "1")
+                        .param("size", "5")
+                        .param("order_by", "eraId")
+                        .param("order_direction", Sort.Direction.DESC.name()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.itemCount", is(30)))
+                .andExpect(jsonPath("$.pageCount", is(6)))
+                .andExpect(jsonPath("$.pageNumber", is(1)))
+                .andExpect(jsonPath("$.data.[0].blockHash", is("b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f5")))
+                .andExpect(jsonPath("$.data.[4].blockHash", is("771898057312a00e18ab600f63920fd9846821ae74d265b2ddd81b20c1bc0794")));
+    }
+
+    @Test
+    void sortBlockHeightAscending() throws Exception {
+
+        mockMvc.perform(get("/blocks")
+                        .param("page", "1")
+                        .param("size", "5")
+                        .param("order_by", "blockHeight")
+                        .param("order_direction", Sort.Direction.ASC.name()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.itemCount", is(30)))
+                .andExpect(jsonPath("$.pageCount", is(6)))
+                .andExpect(jsonPath("$.pageNumber", is(1)))
+                .andExpect(jsonPath("$.data.[0].blockHash", is("b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f5")))
+                .andExpect(jsonPath("$.data.[4].blockHash", is("771898057312a00e18ab600f63920fd9846821ae74d265b2ddd81b20c1bc0794")));
     }
 
 
-    public  void createTestData() throws IOException {
-
-
+    public void createTestData() throws IOException {
 
         var in = BlockResourceTest.class.getResourceAsStream(BLOCKS_JSON);
         var blocks = new ObjectMapper().readValue(in, new TypeReference<List<Block>>() {
