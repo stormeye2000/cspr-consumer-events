@@ -5,6 +5,7 @@ import com.stormeye.event.store.services.storage.block.repository.BlockRepositor
 import com.stormeye.event.store.services.storage.common.PageResponse;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,12 +39,14 @@ import org.springframework.web.bind.annotation.RestController;
 )
 public class BlockResource {
 
+    /** Enumeration of fields that can be sored on */
     private enum SortableFields {
         blockHeight,
         eraId,
         timestamp
     }
 
+    /** The timestamp fieldname used for defaut sorting */
     public static final String TIMESTAMP = "timestamp";
     private final BlockRepository blockRepository;
 
@@ -56,23 +59,23 @@ public class BlockResource {
     /**
      * Obtains a page of blocks
      *
-     * @param page the page number
-     * @param size the size of the request page
+     * @param page           the page number
+     * @param size           the size of the request page
+     * @param orderBy        the name of the field to order on
+     * @param orderDirection can be ASC or DESC
      * @return a page of blocks as JSON
      */
     @GetMapping(value = "/blocks", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(tags = "blocks", summary = "Obtains the blocks",
             description = "Obtains a page of block that are sortable by timestamp, blockHeight and eraId")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "correctly serving a page of blocks",
-                    content = {@Content(mediaType = "application/json")}),
-    })
-    ResponseEntity<PageResponse<Block>> getBlocks(@RequestParam(value = "page", defaultValue = "1", required = false) final int page,
+    ResponseEntity<PageResponse<Block>> getBlocks(@Parameter(description = "The number of the page to obtain, starting from 1")
+                                                  @RequestParam(value = "page", defaultValue = "1", required = false) final int page,
+                                                  @Parameter(description = "The number of blocks to retrieved in a page, defaults to 10")
                                                   @RequestParam(value = "size", defaultValue = "10", required = false) final int size,
+                                                  @Parameter(description = "The name of the field to sort on")
                                                   @RequestParam(value = "order_by", defaultValue = TIMESTAMP, required = false) final SortableFields orderBy,
+                                                  @Parameter(description = "The direction of the sort")
                                                   @RequestParam(value = "order_direction", defaultValue = "DESC", required = false) final Sort.Direction orderDirection) {
-
 
         var request = PageRequest.of(page - 1, size, getSort(orderBy.name(), orderDirection));
         return ResponseEntity.ok(new PageResponse<>(blockRepository.findAll(request)));
