@@ -43,7 +43,7 @@ public class BlockResource {
         timestamp
     }
 
-    /** The timestamp fieldname used for defaut sorting */
+    /** The timestamp filename used for default sorting */
     public static final String TIMESTAMP = "timestamp";
     private final BlockRepository blockRepository;
 
